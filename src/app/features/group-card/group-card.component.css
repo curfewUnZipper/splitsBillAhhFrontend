@@ -7,3 +7,21 @@
   margin-top: 8px;
   color: #c4b5fd;
 }
+
+/* Primary */
+.btn-primary {
+  background: linear-gradient(135deg, #8b5cf6, #6366f1);
+  color: #fff;
+
+  box-shadow: 0 4px 20px rgba(139,92,246,0.4);
+}
+
+/* Press effect */
+.btn:active {
+  transform: scale(0.95);
+}
+
+/* Hover */
+.btn:hover {
+  transform: translateY(-1px);
+}

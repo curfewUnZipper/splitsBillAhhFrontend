@@ -7,6 +7,7 @@
   <input [(ngModel)]="description" name="desc" placeholder="Description">
 
   <!-- Toggle -->
+  <div class="subtle">Who paid?</div>
   <div class="toggle">
     <button
       [class.active]="paidBy === 'A'"
@@ -17,7 +18,7 @@
       (click)="changePayer('B')">B</button>
   </div>
 
-  <div *ngIf="showUndo" class="warning">
+  <div *ngIf="showUndo" class="subtle">
     Changed payer ✔ <span (click)="undoChange()">Undo</span>
   </div>
 
@@ -44,7 +45,8 @@
 
   </div>
 
-  <button class="btn btn-primary" (click)="save()">Save</button>
-  <button class="btn" (click)="close.emit()">Cancel</button>
-
+  <div style="display:flex; gap:10px;">
+      <button class="btn btn-primary" (click)="save()">Save</button>
+      <button class="btn" (click)="close.emit()">Cancel</button>
+  </div>
 </div>

@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Group } from '../../models/models';
 import { Router } from '@angular/router';
 import { ApiService } from '../../core/services/api.service';
+import { NgZone } from '@angular/core';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-home',
@@ -10,7 +12,7 @@ import { ApiService } from '../../core/services/api.service';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-
+  isReady = false;
   openGroupSheet = false;
   message = '';
   groups: Group[] = [];
@@ -25,7 +27,8 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private api: ApiService
+    private api: ApiService,
+    private cd: ChangeDetectorRef 
   ) {}
 
   ngOnInit() {
@@ -34,20 +37,26 @@ export class HomeComponent implements OnInit {
       return;
     }
 
-    this.loadUser();   // 👈 FIRST
+    this.loadUser();
     this.loadGroups();
   }
-
+  
   // ================= USER =================
 
   loadUser() {
     this.api.getMe().subscribe((res: any) => {
+
       this.userEmail = res.email;
 
-      // 👇 only B gets messages
       if (this.userEmail === 'b@mail.com') {
         this.loadMessage();
       }
+
+      if (this.userEmail === 'a@mail.com') {
+        this.loadMessages();
+      }
+
+      this.cd.detectChanges();   // 👈 FIX
     });
   }
 
@@ -63,15 +72,18 @@ export class HomeComponent implements OnInit {
 
   loadGroups() {
     this.api.getGroups().subscribe((res: any[]) => {
+
       this.groups = res.map(g => ({
         id: g.id,
         name: g.name,
-        from: g.startDate,
-        to: g.endDate,
-        expenses: g.expenses || [],
-        settlements: g.settlements || [],
+        from: this.formatDate(g.startDate),
+        to: this.formatDate(g.endDate),
+        expenses: [],
+        settlements: [],
         expanded: false
       }));
+
+      this.cd.detectChanges();   // 👈 FIX
     });
   }
 
@@ -83,8 +95,17 @@ export class HomeComponent implements OnInit {
       startDate: this.newGroup.from,
       endDate: this.newGroup.to
     }).subscribe(() => {
+
       this.loadGroups();
+
       this.openGroupSheet = false;
+
+      // 👇 reset form
+      this.newGroup = {
+        name: '',
+        from: '',
+        to: ''
+      };
     });
   }
 
@@ -155,4 +176,18 @@ export class HomeComponent implements OnInit {
     this.newMessage = '';
     this.editingId = null;
   }
+ 
+  formatDate(dateStr: string | null) {
+    if (!dateStr) return '';
+
+    const d = new Date(dateStr);
+
+    return d.toLocaleDateString('en-GB', {
+      day: '2-digit',
+      month: 'short'
+    });
+  }
+
+  
+  
 }

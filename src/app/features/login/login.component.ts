@@ -22,14 +22,14 @@ export class LoginComponent {
       password: this.password
     }).subscribe({
       next: (res: any) => {
-        console.log("TOKEN:", res);
 
         localStorage.setItem('token', res);
 
-        this.router.navigateByUrl('/');
+        // 👇 ensure fresh load
+        this.router.navigate(['/home']);
+
       },
-      error: (err) => {
-        console.error("LOGIN ERROR:", err); // 👈 SEE REAL ERROR
+      error: () => {
         this.error = 'Invalid credentials';
       }
     });

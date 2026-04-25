@@ -1,6 +1,6 @@
-<div class="glass">
+<div class="card">
 
-  <div class="group-title">
+  <div class="title">
     {{ group.name }} ({{group.from}} - {{group.to}})
   </div>
 
@@ -9,18 +9,18 @@
     ₹{{ getAbs(balance) }}
   </div>
 
-  <button class="btn" (click)="toggle()">
+  <button class="btn btn-block" (click)="toggle()">
     {{ group.expanded ? 'Hide Details' : 'View Details' }}
   </button>
 
-  <div *ngIf="group.expanded" class="expanded">
+  <div *ngIf="group.expanded" class="list">
 
-    <div *ngFor="let e of group.expenses" class="expense">
-      <span>{{e.description}}</span>
-      <span>₹{{e.amount}} ({{e.paidBy}})</span>
+    <div *ngFor="let e of group.expenses" class="list-item">
+      <span>{{ e.description }}</span>
+      <span>₹{{ e.amount }} ({{ e.paidBy }})</span>
     </div>
 
-    <button class="btn btn-primary" (click)="openSheet = true">
+    <button class="btn btn-primary btn-block" (click)="openSheet = true">
       + Add Expense
     </button>
 
