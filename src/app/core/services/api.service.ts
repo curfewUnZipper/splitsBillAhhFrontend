@@ -44,9 +44,8 @@ export class ApiService {
       this.getHeaders()
     );
   }
-  getRandomMessage() {
-    return this.http.get(`${BASE_URL}/messages/random`);
-  }
+
+
   // ================= BALANCE =================
   getBalance(groupId: number): Observable<any> {
     return this.http.get(
@@ -63,9 +62,32 @@ export class ApiService {
       this.getHeaders()
     );
   }
-getExpenses(groupId: number) {
-  return this.http.get<any[]>(`http://localhost:8080/groups/${groupId}/expenses`);
-}
+  getExpenses(groupId: number) {
+    return this.http.get<any[]>(`http://localhost:8080/groups/${groupId}/expenses`);
+  }
+ // ================= MESSAGES =================
+  getRandomMessage() {
+    return this.http.get<any>('http://localhost:8080/messages/random');
+  }
 
+  getMessages() {
+    return this.http.get<any[]>('http://localhost:8080/messages');
+  }
+
+  addMessage(data: any) {
+    return this.http.post('http://localhost:8080/messages', data);
+  }
+
+  updateMessage(id: number, data: any) {
+    return this.http.put(`http://localhost:8080/messages/${id}`, data);
+  }
+
+  deleteMessage(id: number) {
+    return this.http.delete(`http://localhost:8080/messages/${id}`);
+  }
+
+  getMe() {
+    return this.http.get<any>('http://localhost:8080/me');
+  }
 
 }

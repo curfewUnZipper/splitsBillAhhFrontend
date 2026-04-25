@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Group } from '../../models/models';
 import { Router } from '@angular/router';
 import { ApiService } from '../../core/services/api.service';
@@ -11,11 +11,11 @@ import { ApiService } from '../../core/services/api.service';
 })
 export class HomeComponent implements OnInit {
 
-  message = this.getRandomMessage();
-
   openGroupSheet = false;
-
+  message = '';
   groups: Group[] = [];
+
+  userEmail = '';   // 👈 single source of truth
 
   newGroup = {
     name: '',
@@ -25,8 +25,7 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private api: ApiService,
-    private cd: ChangeDetectorRef   // 👈 ADD THIS
+    private api: ApiService
   ) {}
 
   ngOnInit() {
@@ -35,13 +34,35 @@ export class HomeComponent implements OnInit {
       return;
     }
 
+    this.loadUser();   // 👈 FIRST
     this.loadGroups();
-    this.loadMessage();
   }
+
+  // ================= USER =================
+
+  loadUser() {
+    this.api.getMe().subscribe((res: any) => {
+      this.userEmail = res.email;
+
+      // 👇 only B gets messages
+      if (this.userEmail === 'b@mail.com') {
+        this.loadMessage();
+      }
+    });
+  }
+
+  isAdmin() {
+    return this.userEmail === 'a@mail.com';
+  }
+
+  isUserB() {
+    return this.userEmail === 'b@mail.com';
+  }
+
+  // ================= GROUPS =================
 
   loadGroups() {
     this.api.getGroups().subscribe((res: any[]) => {
-
       this.groups = res.map(g => ({
         id: g.id,
         name: g.name,
@@ -51,8 +72,6 @@ export class HomeComponent implements OnInit {
         settlements: g.settlements || [],
         expanded: false
       }));
-
-      this.cd.detectChanges();   // 👈 FORCE UI UPDATE
     });
   }
 
@@ -69,24 +88,71 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  getRandomMessage() {
-    const msgs = [
-      "You just made this app 10x prettier ✨",
-      "How you doin'? 😉",
-      "Back already? I missed you 😏"
-    ];
-    return msgs[Math.floor(Math.random() * msgs.length)];
-  }
-
   logout() {
     localStorage.removeItem('token');
     this.router.navigate(['/login']);
   }
 
-  loadMessage() {
-  this.api.getRandomMessage().subscribe((res: any) => {
-    this.message = res.message;
-  });
-}
+  // ================= MESSAGE =================
 
+  loadMessage() {
+    this.api.getRandomMessage().subscribe((res: any) => {
+      this.message = res.message;
+    });
+  }
+
+  // ================= MESSAGE PANEL =================
+
+  openMessagePanel = false;
+  messages: any[] = [];
+  newMessage = '';
+  editingId: number | null = null;
+
+  loadMessages() {
+    this.api.getMessages().subscribe((res: any[]) => {
+      this.messages = res;
+    });
+  }
+
+  addMessage() {
+    if (!this.newMessage) return;
+
+    this.api.addMessage({
+      message: this.newMessage,
+      active: true
+    }).subscribe(() => {
+      this.newMessage = '';
+      this.loadMessages();
+    });
+  }
+
+  deleteMessage(id: number) {
+    this.api.deleteMessage(id).subscribe(() => {
+      this.loadMessages();
+    });
+  }
+
+  editMessage(m: any) {
+    this.newMessage = m.message;
+    this.editingId = m.id;
+  }
+
+  updateMessage() {
+    if (!this.editingId) return;
+
+    this.api.updateMessage(this.editingId, {
+      message: this.newMessage,
+      active: true
+    }).subscribe(() => {
+      this.newMessage = '';
+      this.editingId = null;
+      this.loadMessages();
+    });
+  }
+
+  closeMessagePanel() {
+    this.openMessagePanel = false;
+    this.newMessage = '';
+    this.editingId = null;
+  }
 }

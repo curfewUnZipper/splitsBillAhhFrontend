@@ -1,34 +1,24 @@
 <div class="header-card">
-  <div class="greeting">Hey B 😏</div>
-  <div class="message">{{ message }}</div>
-</div>
-<button class="btn" (click)="logout()">Logout</button>
-<app-group-card
-  *ngFor="let group of groups"
-  [group]="group">
-</app-group-card>
 
-
-<!-- Floating Add Button -->
-<button class="fab" (click)="openGroupSheet = true">
-  +
-</button>
-
-<!-- Bottom Sheet -->
-<div class="bottom-sheet" [class.show]="openGroupSheet">
-
-  <div class="sheet-content">
-
-    <h3>Create Group</h3>
-
-    <input [(ngModel)]="newGroup.name" placeholder="Group Name (Goa Trip)">
-
-    <input type="date" [(ngModel)]="newGroup.from">
-    <input type="date" [(ngModel)]="newGroup.to">
-
-    <button class="btn btn-primary" (click)="createGroup()">Create</button>
-    <button class="btn" (click)="openGroupSheet = false">Cancel</button>
-
+  <!-- Greeting -->
+  <div class="greeting">
+    {{ userEmail === 'a@mail.com' ? 'Welcome Back A' : 'Hey B 😏' }}
   </div>
+
+  <!-- ONLY B sees message -->
+  <div *ngIf="userEmail === 'b@mail.com'"
+       class="message"
+       (click)="loadMessage()">
+    {{ message }}
+  </div>
+
+  <!-- ONLY A sees manage -->
+  <button *ngIf="userEmail === 'a@mail.com'"
+    class="btn"
+    (click)="openMessagePanel = true; loadMessages()">
+    Manage Messages
+  </button>
+
+  <button class="btn" (click)="logout()">Logout</button>
 
 </div>
