@@ -2,7 +2,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
+/* ================= CONFIG ================= */
+// 👉 CHANGE THIS ONE LINE LATER
 const BASE_URL = 'http://localhost:8080';
+// const BASE_URL = 'https://your-backend-url.com';
 
 @Injectable({ providedIn: 'root' })
 export class ApiService {
@@ -23,7 +26,7 @@ export class ApiService {
     return this.http.post(
       `${BASE_URL}/auth/login`,
       data,
-      { responseType: 'text' }   // 👈 IMPORTANT FIX
+      { responseType: 'text' }
     );
   }
 
@@ -45,6 +48,12 @@ export class ApiService {
     );
   }
 
+  getExpenses(groupId: number): Observable<any[]> {
+    return this.http.get<any[]>(
+      `${BASE_URL}/groups/${groupId}/expenses`,
+      this.getHeaders()
+    );
+  }
 
   // ================= BALANCE =================
   getBalance(groupId: number): Observable<any> {
@@ -62,32 +71,30 @@ export class ApiService {
       this.getHeaders()
     );
   }
-  getExpenses(groupId: number) {
-    return this.http.get<any[]>(`http://localhost:8080/groups/${groupId}/expenses`);
-  }
- // ================= MESSAGES =================
+
+  // ================= MESSAGES =================
   getRandomMessage() {
-    return this.http.get<any>('http://localhost:8080/messages/random');
+    return this.http.get<any>(`${BASE_URL}/messages/random`);
   }
 
   getMessages() {
-    return this.http.get<any[]>('http://localhost:8080/messages');
+    return this.http.get<any[]>(`${BASE_URL}/messages`);
   }
 
   addMessage(data: any) {
-    return this.http.post('http://localhost:8080/messages', data);
+    return this.http.post(`${BASE_URL}/messages`, data);
   }
 
   updateMessage(id: number, data: any) {
-    return this.http.put(`http://localhost:8080/messages/${id}`, data);
+    return this.http.put(`${BASE_URL}/messages/${id}`, data);
   }
 
   deleteMessage(id: number) {
-    return this.http.delete(`http://localhost:8080/messages/${id}`);
+    return this.http.delete(`${BASE_URL}/messages/${id}`);
   }
 
+  // ================= USER =================
   getMe() {
-    return this.http.get<any>('http://localhost:8080/me');
+    return this.http.get<any>(`${BASE_URL}/me`, this.getHeaders());
   }
-
 }

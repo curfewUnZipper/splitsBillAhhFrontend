@@ -119,6 +119,7 @@ export class HomeComponent implements OnInit {
   loadMessage() {
     this.api.getRandomMessage().subscribe((res: any) => {
       this.message = res.message;
+      this.cd.detectChanges();
     });
   }
 

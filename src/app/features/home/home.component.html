@@ -1,7 +1,8 @@
+<div class="app-title">SplitsBillAhh</div>
 <div class="header card">
 
   <div class="header-top">
-
+    
     <div class="left">
       <div class="greeting">
         {{ userEmail === 'a@mail.com' ? 'Welcome Back A' : 'Hey B 😏' }}
@@ -42,17 +43,22 @@
 </button>
 
 <!-- MESSAGE PANEL -->
-<div class="bottom-sheet" [class.show]="openMessagePanel">
+ <div class="sheet-backdrop"
+     [class.show]="openGroupSheet || openMessagePanel">
+</div>
+<div class="bottom-sheet" [class.show]="openMessagePanel" style="z-index: 100">
 
   <div class="sheet-content">
 
     <h3>Manage Messages</h3>
 
     <div *ngFor="let m of messages" class="list-item">
-      <span>{{ m.message }}</span>
+      <span class="msg-text">{{ m.message }}</span>
 
-      <button (click)="editMessage(m)">✏️</button>
-      <button (click)="deleteMessage(m.id)">🗑</button>
+      <div class="actions">
+        <button class="icon-btn edit" (click)="editMessage(m)">✎</button>
+        <button class="icon-btn delete" (click)="deleteMessage(m.id)">🗑</button>
+      </div>
     </div>
 
     <input [(ngModel)]="newMessage" placeholder="New message">
@@ -68,7 +74,10 @@
 
 </div>
 <!-- CREATE GROUP SHEET -->
-<div class="bottom-sheet" [class.show]="openGroupSheet">
+ <div class="sheet-backdrop"
+     [class.show]="openGroupSheet || openMessagePanel">
+</div>
+<div class="bottom-sheet" [class.show]="openGroupSheet" style="z-index: 100">
 
   <div class="sheet-content">
 
