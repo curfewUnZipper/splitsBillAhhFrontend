@@ -1,0 +1,18 @@
+/* Floating Button */
+.fab {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+
+  border: none;
+  font-size: 28px;
+  color: white;
+
+  background: linear-gradient(135deg, #8b5cf6, #6366f1);
+
+  box-shadow: 0 6px 20px rgba(139,92,246,0.5);
+}

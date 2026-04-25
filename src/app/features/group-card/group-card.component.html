@@ -1,0 +1,39 @@
+<div class="glass">
+
+  <div class="group-title">
+    {{ group.name }} ({{group.from}} - {{group.to}})
+  </div>
+
+  <div class="balance" *ngIf="balance !== 0">
+    {{ balance > 0 ? 'B owes A' : 'A owes B' }}
+    ₹{{ getAbs(balance) }}
+  </div>
+
+  <button class="btn" (click)="toggle()">
+    {{ group.expanded ? 'Hide Details' : 'View Details' }}
+  </button>
+
+  <div *ngIf="group.expanded" class="expanded">
+
+    <div *ngFor="let e of group.expenses" class="expense">
+      <span>{{e.description}}</span>
+      <span>₹{{e.amount}} ({{e.paidBy}})</span>
+    </div>
+
+    <button class="btn btn-primary" (click)="openSheet = true">
+      + Add Expense
+    </button>
+
+  </div>
+
+</div>
+
+<!-- Bottom Sheet -->
+<div class="bottom-sheet" [class.show]="openSheet">
+
+  <app-add-expense
+    [group]="group"
+    (close)="openSheet = false; refresh()">
+  </app-add-expense>
+
+</div>

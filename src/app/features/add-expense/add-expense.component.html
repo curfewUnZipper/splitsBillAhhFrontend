@@ -1,0 +1,50 @@
+<div class="sheet-content">
+
+  <h3>Add Expense</h3>
+
+  <input [(ngModel)]="amount" name="amount" placeholder="Amount">
+
+  <input [(ngModel)]="description" name="desc" placeholder="Description">
+
+  <!-- Toggle -->
+  <div class="toggle">
+    <button
+      [class.active]="paidBy === 'A'"
+      (click)="changePayer('A')">A</button>
+
+    <button
+      [class.active]="paidBy === 'B'"
+      (click)="changePayer('B')">B</button>
+  </div>
+
+  <div *ngIf="showUndo" class="warning">
+    Changed payer ✔ <span (click)="undoChange()">Undo</span>
+  </div>
+
+  <!-- Split -->
+  <button class="btn" (click)="custom = !custom">
+    Custom Split
+  </button>
+
+  <div *ngIf="custom" class="split-box">
+
+    <div class="split-row">
+      <label>A pays:</label>
+      <input type="number" [(ngModel)]="splitA" name="splitA">
+    </div>
+
+    <div class="split-row">
+      <label>B pays:</label>
+      <input type="number" [(ngModel)]="splitB" name="splitB">
+    </div>
+
+    <div *ngIf="splitA + splitB !== amount" class="warning">
+      ⚠ Total must match amount
+    </div>
+
+  </div>
+
+  <button class="btn btn-primary" (click)="save()">Save</button>
+  <button class="btn" (click)="close.emit()">Cancel</button>
+
+</div>
