@@ -1,6 +1,6 @@
 <div class="app-title">SplitsBillAhh</div>
-<div class="header card">
 
+<div class="header card">
   <div class="header-top">
     
     <div class="left">
@@ -9,8 +9,8 @@
       </div>
 
       <div *ngIf="userEmail === 'b@mail.com'"
-          class="message"
-          (click)="loadMessage()">
+           class="message"
+           (click)="loadMessage()">
         {{ message }}
       </div>
     </div>
@@ -22,31 +22,45 @@
         Manage
       </button>
 
-      <button class="btn" (click)="logout()">
-        Logout
-      </button>
+      <button class="btn" (click)="logout()">Logout</button>
     </div>
 
   </div>
-
 </div>
 
-<!-- GROUPS -->
-<app-group-card
-  *ngFor="let group of groups"
-  [group]="group">
-</app-group-card>
+<!-- MAIN CONTENT -->
+<div [class.no-interaction]="activeGroupForExpense || openGroupSheet || openMessagePanel">
+
+  <!-- GROUPS -->
+  <app-group-card
+    *ngFor="let group of groups"
+    [group]="group"
+    (openExpense)="activeGroupForExpense = group">
+  </app-group-card>
+
+</div>
 
 <!-- FAB -->
-<button class="fab" (click)="openGroupSheet = true">
-  +
-</button>
+<button class="fab" (click)="openGroupSheet = true">+</button>
 
-<!-- MESSAGE PANEL -->
- <div class="sheet-backdrop"
-     [class.show]="openGroupSheet || openMessagePanel">
+<!-- SINGLE BACKDROP -->
+<div class="sheet-backdrop"
+     [class.show]="activeGroupForExpense || openGroupSheet || openMessagePanel">
 </div>
-<div class="bottom-sheet" [class.show]="openMessagePanel" style="z-index: 100">
+
+<!-- ================= ADD EXPENSE SHEET ================= -->
+<div class="bottom-sheet" [class.show]="activeGroupForExpense">
+
+  <app-add-expense
+    *ngIf="activeGroupForExpense"
+    [group]="activeGroupForExpense"
+    (close)="activeGroupForExpense = null">
+  </app-add-expense>
+
+</div>
+
+<!-- ================= MESSAGE PANEL ================= -->
+<div class="bottom-sheet" [class.show]="openMessagePanel">
 
   <div class="sheet-content">
 
@@ -73,30 +87,21 @@
   </div>
 
 </div>
-<!-- CREATE GROUP SHEET -->
- <div class="sheet-backdrop"
-     [class.show]="openGroupSheet || openMessagePanel">
-</div>
-<div class="bottom-sheet" [class.show]="openGroupSheet" style="z-index: 100">
+
+<!-- ================= CREATE GROUP ================= -->
+<div class="bottom-sheet" [class.show]="openGroupSheet">
 
   <div class="sheet-content">
 
     <h3>Create Group</h3>
 
     <input [(ngModel)]="newGroup.name" placeholder="Group name">
-
     <input type="date" [(ngModel)]="newGroup.from">
-
     <input type="date" [(ngModel)]="newGroup.to">
 
     <div style="display:flex; gap:10px;">
-      <button class="btn btn-primary" (click)="createGroup()">
-        Create
-      </button>
-
-      <button class="btn" (click)="openGroupSheet = false">
-        Cancel
-      </button>
+      <button class="btn btn-primary" (click)="createGroup()">Create</button>
+      <button class="btn" (click)="openGroupSheet = false">Cancel</button>
     </div>
 
   </div>

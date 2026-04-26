@@ -16,6 +16,7 @@ export class HomeComponent implements OnInit {
   openGroupSheet = false;
   message = '';
   groups: Group[] = [];
+  (openExpense)="openExpenseSheet(group)"
 
   userEmail = '';   // 👈 single source of truth
 
@@ -24,7 +25,7 @@ export class HomeComponent implements OnInit {
     from: '',
     to: ''
   };
-
+  activeGroupForExpense: Group | null = null;
   constructor(
     private router: Router,
     private api: ApiService,
@@ -190,5 +191,11 @@ export class HomeComponent implements OnInit {
   }
 
   
-  
+  openExpenseSheet(group: Group) {
+    // close others
+    this.openGroupSheet = false;
+    this.openMessagePanel = false;
+
+    this.activeGroupForExpense = group;
+  }
 }

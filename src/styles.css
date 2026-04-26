@@ -15,6 +15,11 @@ body {
   min-height: 100vh;
 }
 
+.no-interaction {
+  pointer-events: none;
+  user-select: none;
+  filter: blur(2px);   /* 👈 nice subtle blur */
+}
 .app-title {
   text-align: center;
   font-size: 22px;
@@ -201,10 +206,12 @@ body {
   background: linear-gradient(135deg, #8b5cf6, #6366f1);
   color: white;
   font-size: 24px;
+  z-index:80;
 }
 
 /* ===== BOTTOM SHEET ===== */
 .bottom-sheet {
+  z-index:100;
   position: fixed;
   left: 0;
   bottom: -100%;
@@ -253,7 +260,7 @@ body {
   pointer-events: none;
 
   transition: 0.3s ease;
-  z-index: 50;
+  z-index: 90;
 }
 
 .sheet-backdrop.show {

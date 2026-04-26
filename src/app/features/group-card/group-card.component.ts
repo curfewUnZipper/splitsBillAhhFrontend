@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Group } from '../../models/models';
 import { ApiService } from '../../core/services/api.service';
 
@@ -11,7 +11,8 @@ import { ApiService } from '../../core/services/api.service';
 export class GroupCardComponent {
 
   @Input() group!: Group;
-
+  @Output() openExpense = new EventEmitter<void>();
+  
   openSheet = false;
   balance: number = 0;
 
