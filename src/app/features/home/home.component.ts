@@ -16,7 +16,6 @@ export class HomeComponent implements OnInit {
   openGroupSheet = false;
   message = '';
   groups: Group[] = [];
-  (openExpense)="openExpenseSheet(group)"
 
   userEmail = '';   // 👈 single source of truth
 
@@ -197,5 +196,10 @@ export class HomeComponent implements OnInit {
     this.openMessagePanel = false;
 
     this.activeGroupForExpense = group;
+  }
+  closeAllSheets() {
+    this.activeGroupForExpense = null;
+    this.openGroupSheet = false;
+    this.openMessagePanel = false;
   }
 }

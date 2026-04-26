@@ -20,20 +20,14 @@
       <span>₹{{ e.amount }} ({{ e.paidBy }})</span>
     </div>
 
-   <button class="btn btn-primary" (click)="openExpense.emit()">
+    <!-- CENTERED BUTTON (no extra class) -->
+    <button
+      class="btn btn-primary"
+      style="display:block; margin:12px auto 0;"
+      (click)="openExpense.emit()">
       + Add Expense
     </button>
 
   </div>
-
-</div>
-
-<!-- Bottom Sheet -->
-<div class="bottom-sheet" [class.show]="openSheet">
-
-  <app-add-expense
-    [group]="group"
-    (close)="openSheet = false; refresh()">
-  </app-add-expense>
 
 </div>

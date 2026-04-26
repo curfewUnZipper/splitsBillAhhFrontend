@@ -31,11 +31,10 @@
 <!-- MAIN CONTENT -->
 <div [class.no-interaction]="activeGroupForExpense || openGroupSheet || openMessagePanel">
 
-  <!-- GROUPS -->
   <app-group-card
     *ngFor="let group of groups"
     [group]="group"
-    (openExpense)="activeGroupForExpense = group">
+    (openExpense)="openExpenseSheet(group)">
   </app-group-card>
 
 </div>
@@ -45,21 +44,22 @@
 
 <!-- SINGLE BACKDROP -->
 <div class="sheet-backdrop"
-     [class.show]="activeGroupForExpense || openGroupSheet || openMessagePanel">
+     [class.show]="activeGroupForExpense || openGroupSheet || openMessagePanel"
+     (click)="closeAllSheets()">
 </div>
 
-<!-- ================= ADD EXPENSE SHEET ================= -->
+<!-- ADD EXPENSE SHEET -->
 <div class="bottom-sheet" [class.show]="activeGroupForExpense">
 
   <app-add-expense
     *ngIf="activeGroupForExpense"
     [group]="activeGroupForExpense"
-    (close)="activeGroupForExpense = null">
+    (close)="closeAllSheets()">
   </app-add-expense>
 
 </div>
 
-<!-- ================= MESSAGE PANEL ================= -->
+<!-- MESSAGE PANEL -->
 <div class="bottom-sheet" [class.show]="openMessagePanel">
 
   <div class="sheet-content">
@@ -88,7 +88,7 @@
 
 </div>
 
-<!-- ================= CREATE GROUP ================= -->
+<!-- CREATE GROUP -->
 <div class="bottom-sheet" [class.show]="openGroupSheet">
 
   <div class="sheet-content">
